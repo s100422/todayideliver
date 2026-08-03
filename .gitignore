@@ -32,6 +32,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# editor
+.obsidian/
+
+# design reference mockups (not needed at runtime, public/food-pattern.png has the copy we use)
+/images/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
