@@ -47,3 +47,34 @@ export async function deleteRestaurant(id: number): Promise<void> {
   const { error } = await supabase.from('restaurants').delete().eq('id', id)
   if (error) throw error
 }
+
+export async function getRestaurant(id: number): Promise<Restaurant | null> {
+  const { data, error } = await supabase.from('restaurants').select('*').eq('id', id).maybeSingle()
+  if (error) throw error
+  return data
+}
+
+export type RestaurantInput = {
+  category_id: number
+  name: string
+  address: string | null
+  used_delivery: boolean
+  score: number | null
+  review: string | null
+  memo: string | null
+}
+
+export async function createRestaurant(userId: string, input: RestaurantInput): Promise<Restaurant> {
+  const { data, error } = await supabase
+    .from('restaurants')
+    .insert({ user_id: userId, ...input })
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function updateRestaurant(id: number, input: RestaurantInput): Promise<void> {
+  const { error } = await supabase.from('restaurants').update(input).eq('id', id)
+  if (error) throw error
+}

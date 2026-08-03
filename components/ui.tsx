@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, InputHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 
 function cn(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(' ')
@@ -57,6 +57,18 @@ export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTex
     <textarea
       className={cn(
         'w-full rounded-2xl border border-black/5 bg-white px-4 py-3 text-ink placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-ink/20',
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export function Select({ className, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <select
+      className={cn(
+        'w-full rounded-2xl border border-black/5 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-ink/20',
         className
       )}
       {...props}
