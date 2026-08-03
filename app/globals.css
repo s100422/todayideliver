@@ -20,9 +20,3 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
 }
-
-.bg-food-pattern {
-  background-image: url('/food-pattern.png');
-  background-size: 340px auto;
-  background-repeat: repeat;
-}

@@ -69,7 +69,7 @@ export function MainList({ user }: { user: LocalUser }) {
         </div>
       </div>
 
-      <div className="bg-food-pattern min-h-[60vh] p-6">
+      <div className="min-h-[60vh] p-6">
         <div className="mb-4 flex justify-end">
           <SortDropdown value={sort} onChange={setSort} />
         </div>
