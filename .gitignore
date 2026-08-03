@@ -38,6 +38,9 @@ yarn-error.log*
 # design reference mockups (not needed at runtime, public/food-pattern.png has the copy we use)
 /images/
 
+# raw font drop (not needed at runtime, app/fonts/ has the copies we use)
+/font_style/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,11 +1,17 @@
 import type { Metadata } from 'next'
-import { Black_Han_Sans, Noto_Sans_KR } from 'next/font/google'
+import { Noto_Sans_KR } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 
-const blackHanSans = Black_Han_Sans({
-  subsets: ['latin'],
-  weight: '400',
+const euljiro = localFont({
+  src: './fonts/BMEULJIROTTF.ttf',
   variable: '--font-hand',
+  display: 'swap',
+})
+
+const yeonsung = localFont({
+  src: './fonts/BMYEONSUNG.ttf',
+  variable: '--font-yeonsung',
   display: 'swap',
 })
 
@@ -27,7 +33,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ko" className={`${blackHanSans.variable} ${notoSansKr.variable}`}>
+    <html
+      lang="ko"
+      className={`${euljiro.variable} ${yeonsung.variable} ${notoSansKr.variable}`}
+    >
       <body className="font-sans">{children}</body>
     </html>
   )

@@ -3,6 +3,7 @@
 @theme {
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-hand), var(--font-body), system-ui, sans-serif;
+  --font-script: var(--font-yeonsung), var(--font-body), system-ui, sans-serif;
 
   --color-paper: #f3efe4;
   --color-ink: #221f1a;
