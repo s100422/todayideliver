@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { DeliveryScooterIcon } from '@/components/icons/DeliveryScooterIcon'
+import { DeliveryAnimation } from '@/components/icons/DeliveryAnimation'
 import { Input, PillButton } from '@/components/ui'
 
 export function CategoryStep({ onComplete }: { onComplete: (names: string[]) => Promise<void> }) {
@@ -66,7 +66,7 @@ export function CategoryStep({ onComplete }: { onComplete: (names: string[]) => 
         {submitting ? '저장 중…' : '완료'}
       </PillButton>
 
-      <DeliveryScooterIcon className="h-24 w-24 text-ink" />
+      <DeliveryAnimation className="w-48" />
     </main>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { DeliveryScooterIcon } from '@/components/icons/DeliveryScooterIcon'
+import { DeliveryAnimation } from '@/components/icons/DeliveryAnimation'
 import { Input } from '@/components/ui'
 
 export function NicknameStep({ onNext }: { onNext: (nickname: string) => void }) {
@@ -44,7 +44,7 @@ export function NicknameStep({ onNext }: { onNext: (nickname: string) => void })
           →
         </button>
       </form>
-      <DeliveryScooterIcon className="h-24 w-24 text-ink" />
+      <DeliveryAnimation className="w-48" />
     </main>
   )
 }

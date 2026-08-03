@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { DeliveryScooterIcon } from '@/components/icons/DeliveryScooterIcon'
+import { DeliveryAnimation } from '@/components/icons/DeliveryAnimation'
 import { Input, PillButton } from '@/components/ui'
 import {
   createCategories,
@@ -135,7 +135,7 @@ export default function CategoriesPage() {
         <PillButton variant="outline">완료</PillButton>
       </Link>
 
-      <DeliveryScooterIcon className="h-24 w-24" />
+      <DeliveryAnimation className="w-48" />
     </main>
   )
 }
