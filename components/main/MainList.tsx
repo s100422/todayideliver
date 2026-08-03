@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
+import { TransparentVideo } from '@/components/icons/TransparentVideo'
 import { PillButton } from '@/components/ui'
 import { listCategories, type Category } from '@/lib/categories'
 import type { LocalUser } from '@/lib/localUser'
@@ -58,6 +59,8 @@ export function MainList({ user }: { user: LocalUser }) {
             </Link>
           </div>
         </div>
+
+        <TransparentVideo src="/main-header-animation.mp4" className="mt-4 w-64" />
 
         <div className="mt-6">
           <CategoryChips
