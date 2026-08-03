@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Chip } from '@/components/ui'
 import type { Category } from '@/lib/categories'
 
@@ -5,12 +6,12 @@ export function CategoryChips({
   categories,
   selectedId,
   onSelect,
-  onAddClick,
+  addHref,
 }: {
   categories: Category[]
   selectedId: number | null
   onSelect: (id: number | null) => void
-  onAddClick: () => void
+  addHref: string
 }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -25,7 +26,12 @@ export function CategoryChips({
           {c.name}
         </Chip>
       ))}
-      <Chip onClick={onAddClick}>＋</Chip>
+      <Link
+        href={addHref}
+        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-center font-display text-sm text-ink shadow-sm shadow-black/5 transition active:scale-95"
+      >
+        ＋
+      </Link>
     </div>
   )
 }

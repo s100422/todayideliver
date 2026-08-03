@@ -3,10 +3,9 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { PillButton } from '@/components/ui'
-import { createCategories, listCategories, type Category } from '@/lib/categories'
+import { listCategories, type Category } from '@/lib/categories'
 import type { LocalUser } from '@/lib/localUser'
 import { deleteRestaurant, listRestaurants, type Restaurant, type SortOption } from '@/lib/restaurants'
-import { AddCategoryInline } from './AddCategoryInline'
 import { CategoryChips } from './CategoryChips'
 import { EmptyState } from './EmptyState'
 import { RestaurantCard } from './RestaurantCard'
@@ -18,7 +17,6 @@ export function MainList({ user }: { user: LocalUser }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
   const [sort, setSort] = useState<SortOption>('newest')
   const [loading, setLoading] = useState(true)
-  const [addingCategory, setAddingCategory] = useState(false)
 
   const refresh = useCallback(async () => {
     const [cats, rests] = await Promise.all([
@@ -48,9 +46,11 @@ export function MainList({ user }: { user: LocalUser }) {
             배달 집 리스트
           </h1>
           <div className="flex flex-col gap-2">
-            <PillButton variant="outline" onClick={() => setAddingCategory(true)}>
-              카테고리 등록 ＋
-            </PillButton>
+            <Link href="/categories">
+              <PillButton variant="outline" className="w-full">
+                카테고리 등록 ＋
+              </PillButton>
+            </Link>
             <Link href="/restaurants/new">
               <PillButton variant="outline" className="w-full">
                 음식점 등록 ＋
@@ -64,17 +64,8 @@ export function MainList({ user }: { user: LocalUser }) {
             categories={categories}
             selectedId={selectedCategoryId}
             onSelect={setSelectedCategoryId}
-            onAddClick={() => setAddingCategory(true)}
+            addHref="/categories"
           />
-          {addingCategory && (
-            <AddCategoryInline
-              onAdd={async (name) => {
-                await createCategories(user.userId, [name])
-                await refresh()
-              }}
-              onClose={() => setAddingCategory(false)}
-            />
-          )}
         </div>
       </div>
 
