@@ -9,7 +9,7 @@ export function IntroStep({ onNext }: { onNext: () => void }) {
         <br />
         배달이다!
       </h1>
-      <DeliveryAnimation className="w-64 rounded-3xl shadow-sm shadow-black/10" />
+      <DeliveryAnimation className="w-64" />
       <p className="font-script text-xl text-ink/70">&quot;음식에 대한 명언&quot;</p>
       <PillButton onClick={onNext}>시작하기</PillButton>
     </main>
