@@ -24,7 +24,14 @@ export function subscribeAuth(callback: (user: AppUser | null) => void) {
 }
 
 export function signUp(email: string, password: string, nickname: string) {
-  return supabase.auth.signUp({ email, password, options: { data: { nickname } } })
+  return supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { nickname },
+      emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined,
+    },
+  })
 }
 
 export function signIn(email: string, password: string) {
