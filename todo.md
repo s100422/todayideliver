@@ -73,3 +73,9 @@
 - [x] 서버 라우트 구현: `app/api/nearby-recommendations/route.ts` — 위치(lat/lng) + 기존 등록 주소 목록 → 카카오 로컬 API 음식점(FD6) 검색 → 주소/이름 기준 중복 제거 → Gemini로 후보별 추천 문구 생성 → 결과 반환
 - [x] 프론트: `app/recommendations/page.tsx` — 위치 권한 요청, 추천 결과 리스트, "내 리스트에 추가" 시 이름/주소 프리필된 등록 폼으로 연결
 - [x] 실제 위치(서울시청 좌표)로 종단 테스트: 실제 근처 음식점 5곳 + Gemini 추천 문구 정상 수신, 이미 등록한 곳은 중복 제외되는 것까지 확인
+
+## 백로그 (나중에 할 것)
+- [ ] `/recommendations` 리스트에 실제 지도 뷰 추가 (후보 위치에 핀 찍기)
+  - 필요한 것: 카카오 개발자센터에서 **JavaScript 키** 확보(이미 만든 앱의 "앱 키" 탭에 REST API 키 옆에 같이 있음), 그리고 "플랫폼 > Web"에 배포 도메인(`https://todayideliver.vercel.app`, 로컬 개발용 `http://localhost:3000`) 등록
+  - 지금 구조에 얹기만 하면 됨: `/api/nearby-recommendations`가 이미 각 후보의 좌표(x,y)를 카카오 응답에서 받고 있으니 그것만 응답에 추가로 포함시키면 됨 (`app/api/nearby-recommendations/route.ts`에서 `x`,`y` 필드 리턴에 추가)
+  - `AddressSearchField.tsx`에서 이미 검증된 "외부 스크립트 동적 로드 + 임베드" 패턴을 그대로 재사용 가능 (`//dapi.kakao.com/v2/maps/sdk.js?appkey=...&libraries=services`)
