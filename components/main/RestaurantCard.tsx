@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Card } from '@/components/ui'
+import { categoryEmoji } from '@/lib/categories'
 import type { Restaurant } from '@/lib/restaurants'
 
 export function RestaurantCard({
@@ -16,7 +17,7 @@ export function RestaurantCard({
   return (
     <Card>
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-display text-base">
-        <span className="text-check">✔</span>
+        <span>{categoryEmoji(categoryName)}</span>
         <span>{restaurant.name}</span>
         {restaurant.address && <span className="text-sm text-ink/50">| {restaurant.address}</span>}
         {restaurant.used_delivery && restaurant.score != null && (

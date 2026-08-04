@@ -33,3 +33,47 @@ export async function deleteCategory(id: number): Promise<void> {
   const { error } = await supabase.from('categories').delete().eq('id', id)
   if (error) throw error
 }
+
+const CATEGORY_EMOJI_KEYWORDS: [string, string][] = [
+  ['치킨', '🍗'],
+  ['bbq', '🍗'],
+  ['피자', '🍕'],
+  ['떡볶이', '🍢'],
+  ['족발', '🍖'],
+  ['보쌈', '🍖'],
+  ['곱창', '🥘'],
+  ['막창', '🥘'],
+  ['초밥', '🍣'],
+  ['스시', '🍣'],
+  ['회', '🐟'],
+  ['해물', '🦐'],
+  ['생선', '🐟'],
+  ['중식', '🥡'],
+  ['중국요리', '🥡'],
+  ['짜장', '🥡'],
+  ['버거', '🍔'],
+  ['샌드위치', '🥪'],
+  ['카페', '☕'],
+  ['커피', '☕'],
+  ['디저트', '🍰'],
+  ['베이커리', '🍞'],
+  ['분식', '🍢'],
+  ['국밥', '🍚'],
+  ['한식', '🍚'],
+  ['찜', '🍲'],
+  ['탕', '🍲'],
+  ['국수', '🍜'],
+  ['라면', '🍜'],
+]
+
+const CATEGORY_EMOJI_FALLBACK_POOL = ['🍽️', '🍱', '🥟', '🌮', '🥗', '🍛', '🍤', '🍩', '🥙', '🍡']
+
+export function categoryEmoji(name: string): string {
+  const lower = name.toLowerCase()
+  const match = CATEGORY_EMOJI_KEYWORDS.find(([keyword]) => lower.includes(keyword))
+  if (match) return match[1]
+
+  let hash = 0
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0
+  return CATEGORY_EMOJI_FALLBACK_POOL[hash % CATEGORY_EMOJI_FALLBACK_POOL.length]
+}
