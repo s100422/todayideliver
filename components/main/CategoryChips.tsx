@@ -67,7 +67,7 @@ export function CategoryChips({
       onMouseUp={endDrag}
       onMouseLeave={endDrag}
       onClickCapture={onClickCapture}
-      className="no-scrollbar flex cursor-grab items-center gap-3 overflow-x-auto active:cursor-grabbing"
+      className="no-scrollbar flex cursor-grab items-center gap-3 overflow-x-auto pb-5 active:cursor-grabbing"
     >
       <div className="sticky left-0 z-10 flex shrink-0 items-center gap-3 bg-paper pr-3">
         <Chip active={selectedId === null} onClick={() => onSelect(null)}>

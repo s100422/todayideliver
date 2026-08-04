@@ -126,23 +126,25 @@ export function RestaurantForm({
       </FormRow>
 
       <FormRow label={<>배달 시킨 적{'\n'}있나요?</>}>
-        <div className="flex gap-6 py-2">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={values.usedDelivery}
-              onChange={() => set('usedDelivery', true)}
-            />
+        <div className="flex gap-2 py-2" role="radiogroup" aria-label="배달 시킨 적 있나요?">
+          <PillButton
+            type="button"
+            role="radio"
+            aria-checked={values.usedDelivery}
+            variant={values.usedDelivery ? 'solid' : 'outline'}
+            onClick={() => set('usedDelivery', true)}
+          >
             예
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={!values.usedDelivery}
-              onChange={() => set('usedDelivery', false)}
-            />
+          </PillButton>
+          <PillButton
+            type="button"
+            role="radio"
+            aria-checked={!values.usedDelivery}
+            variant={!values.usedDelivery ? 'solid' : 'outline'}
+            onClick={() => set('usedDelivery', false)}
+          >
             아니요
-          </label>
+          </PillButton>
         </div>
       </FormRow>
 
@@ -164,7 +166,7 @@ export function RestaurantForm({
           </FormRow>
 
           <div>
-            <p className="mb-2 font-display">리뷰를 남겨주세요.</p>
+            <p className="mb-2 font-display text-xl">리뷰를 남겨주세요.</p>
             <Textarea
               rows={4}
               maxLength={500}
@@ -177,7 +179,7 @@ export function RestaurantForm({
       )}
 
       <div>
-        <p className="mb-2 font-display">특이사항을 써주세요.</p>
+        <p className="mb-2 font-display text-xl">특이사항을 써주세요.</p>
         <Textarea
           rows={4}
           maxLength={500}
@@ -202,7 +204,7 @@ export function RestaurantForm({
 function FormRow({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-4">
-      <p className="w-24 shrink-0 whitespace-pre-line font-display text-sm">{label}</p>
+      <p className="w-28 shrink-0 whitespace-pre-line font-display text-xl">{label}</p>
       <div className="flex-1">{children}</div>
     </div>
   )

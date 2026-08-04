@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { TransparentVideo } from '@/components/icons/TransparentVideo'
 import { PillButton } from '@/components/ui'
 import { listCategories, type Category } from '@/lib/categories'
 import { deleteRestaurant, listRestaurants, type Restaurant, type SortOption } from '@/lib/restaurants'
@@ -44,7 +43,7 @@ export function MainList({ user }: { user: AppUser }) {
     <main className="min-h-screen">
       <div className="p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <h1 className="font-display text-2xl leading-tight">
+          <h1 className="font-display text-4xl leading-tight">
             &lsquo;{user.nickname}&rsquo;의
             <br />
             배달 집 리스트
@@ -60,11 +59,6 @@ export function MainList({ user }: { user: AppUser }) {
                 음식점 등록 ＋
               </PillButton>
             </Link>
-            <Link href="/recommendations">
-              <PillButton variant="outline" className="w-full">
-                내 주변 추천 📍
-              </PillButton>
-            </Link>
             <button
               type="button"
               onClick={() => signOut()}
@@ -75,7 +69,13 @@ export function MainList({ user }: { user: AppUser }) {
           </div>
         </div>
 
-        <TransparentVideo src="/main-header-animation.mp4" className="mt-4 w-64" />
+        <Link
+          href="/recommendations"
+          className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-gradient-to-b from-accent-light to-accent px-6 py-5 text-white shadow-[0_4px_0_var(--color-accent-dark),0_7px_12px_rgba(0,0,0,0.2)] transition active:translate-y-[3px] active:shadow-none"
+        >
+          <span className="font-display text-lg">내 주변 맛집 둘러보기</span>
+          <span className="text-2xl">📍</span>
+        </Link>
 
         <div className="mt-6">
           <CategoryChips
