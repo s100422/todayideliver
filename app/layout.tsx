@@ -38,7 +38,7 @@ export default function RootLayout({
       className={`${euljiro.variable} ${yeonsung.variable} ${notoSansKr.variable}`}
     >
       <body className="font-sans">
-        <div className="app-frame mx-auto min-h-screen w-full max-w-[430px] shadow-2xl sm:my-0">
+        <div className="app-frame mx-auto min-h-screen w-full max-w-[500px] shadow-2xl sm:my-0">
           {children}
         </div>
       </body>

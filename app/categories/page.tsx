@@ -134,7 +134,7 @@ export default function CategoriesPage() {
       </div>
 
       <Link href="/">
-        <PillButton variant="outline">완료</PillButton>
+        <PillButton variant="accent">완료</PillButton>
       </Link>
 
       <DeliveryAnimation className="w-48" />

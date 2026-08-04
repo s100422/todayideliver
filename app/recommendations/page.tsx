@@ -123,7 +123,7 @@ export default function RecommendationsPage() {
             <br />
             추천받아볼까요?
           </p>
-          <PillButton onClick={() => setStatus('asking')}>추천 받기</PillButton>
+          <PillButton variant="accent" onClick={() => setStatus('asking')}>추천 받기</PillButton>
         </div>
       )}
 
@@ -136,7 +136,7 @@ export default function RecommendationsPage() {
             onChange={(e) => setFoodQuery(e.target.value)}
             className="max-w-xs"
           />
-          <PillButton onClick={() => fetchRecommendations(foodQuery.trim() || undefined)}>
+          <PillButton variant="accent" onClick={() => fetchRecommendations(foodQuery.trim() || undefined)}>
             이 음식으로 찾기
           </PillButton>
           <PillButton variant="outline" onClick={() => fetchRecommendations()}>
@@ -160,7 +160,7 @@ export default function RecommendationsPage() {
       {status === 'error' && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
           <p className="text-sm text-delete">{error}</p>
-          <PillButton variant="outline" onClick={() => fetchRecommendations(activeFoodQuery || undefined)}>
+          <PillButton variant="accent" onClick={() => fetchRecommendations(activeFoodQuery || undefined)}>
             다시 시도
           </PillButton>
         </div>
@@ -173,7 +173,7 @@ export default function RecommendationsPage() {
               ? `'${activeFoodQuery}'은(는) '${user.nickname}' 님 주변에 없어요!ㅠㅠ`
               : '근처에 새로 추천할 음식점을 못 찾았어요.'}
           </p>
-          <PillButton variant="outline" onClick={() => setStatus('asking')}>
+          <PillButton variant="accent" onClick={() => setStatus('asking')}>
             다른 음식으로 다시 찾기
           </PillButton>
         </div>
@@ -225,7 +225,7 @@ export default function RecommendationsPage() {
                 <Link
                   href={`/restaurants/new?name=${encodeURIComponent(r.name)}&address=${encodeURIComponent(r.address)}`}
                 >
-                  <PillButton variant="outline">내 리스트에 추가</PillButton>
+                  <PillButton variant="accent">내 리스트에 추가</PillButton>
                 </Link>
               </div>
             </div>

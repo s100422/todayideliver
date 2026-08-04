@@ -50,12 +50,12 @@ export function MainList({ user }: { user: AppUser }) {
           </h1>
           <div className="flex flex-col gap-2">
             <Link href="/categories">
-              <PillButton variant="outline" className="w-full">
+              <PillButton variant="accent" className="w-full">
                 카테고리 등록 ＋
               </PillButton>
             </Link>
             <Link href="/restaurants/new">
-              <PillButton variant="outline" className="w-full">
+              <PillButton variant="accent" className="w-full">
                 음식점 등록 ＋
               </PillButton>
             </Link>
@@ -104,7 +104,7 @@ export function MainList({ user }: { user: AppUser }) {
             </div>
             <div className="mt-6 flex justify-center">
               <Link href={addRestaurantHref}>
-                <PillButton variant="outline">음식점 추가 ＋</PillButton>
+                <PillButton variant="accent">음식점 추가 ＋</PillButton>
               </Link>
             </div>
           </>

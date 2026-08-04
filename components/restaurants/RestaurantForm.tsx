@@ -192,7 +192,7 @@ export function RestaurantForm({
       {error && <p className="text-sm text-delete">{error}</p>}
 
       <div className="flex justify-center gap-3">
-        <PillButton variant="outline" onClick={submit} disabled={submitting}>
+        <PillButton variant="accent" onClick={submit} disabled={submitting}>
           {submitting ? '저장 중…' : '저장하기'}
         </PillButton>
         {extraAction}

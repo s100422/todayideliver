@@ -62,7 +62,7 @@ export function CategoryStep({ onComplete }: { onComplete: (names: string[]) => 
 
       {error && <p className="text-sm text-delete">{error}</p>}
 
-      <PillButton variant="outline" onClick={submit} disabled={submitting}>
+      <PillButton variant="accent" onClick={submit} disabled={submitting}>
         {submitting ? '저장 중…' : '완료'}
       </PillButton>
 

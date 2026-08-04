@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const CANVAS_WIDTH = 320
 const CANVAS_HEIGHT = 180
@@ -19,6 +19,7 @@ export function TransparentVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [paused, setPaused] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
@@ -29,6 +30,10 @@ export function TransparentVideo({
     if (!ctx) return
 
     video.muted = true
+    if (paused) {
+      video.pause()
+      return
+    }
     video.play().catch(() => {})
 
     function draw() {
@@ -59,10 +64,19 @@ export function TransparentVideo({
     const interval = setInterval(draw, FRAME_INTERVAL_MS)
 
     return () => clearInterval(interval)
-  }, [tint])
+  }, [tint, paused])
 
   return (
-    <div className={`relative aspect-video overflow-hidden ${className ?? ''}`}>
+    <div
+      role="button"
+      aria-label={paused ? '애니메이션 재생' : '애니메이션 정지'}
+      tabIndex={0}
+      onClick={() => setPaused((p) => !p)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') setPaused((p) => !p)
+      }}
+      className={`relative aspect-video cursor-pointer overflow-hidden ${className ?? ''}`}
+    >
       <video
         ref={videoRef}
         src={src}

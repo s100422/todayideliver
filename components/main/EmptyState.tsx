@@ -10,7 +10,7 @@ export function EmptyState({ href = '/restaurants/new' }: { href?: string }) {
         등록하러 가시겠어요?
       </p>
       <Link href={href}>
-        <PillButton variant="outline">음식점 등록</PillButton>
+        <PillButton variant="accent">음식점 등록</PillButton>
       </Link>
     </div>
   )
