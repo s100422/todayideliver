@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { BackButton, PillButton } from '@/components/ui'
 import { listRestaurants } from '@/lib/restaurants'
-import { getCurrentUser, type AppUser } from '@/lib/session'
+import { getAccessToken, getCurrentUser, type AppUser } from '@/lib/session'
 
 type Recommendation = {
   id: string
@@ -56,9 +56,13 @@ export default function RecommendationsPage() {
         setStatus('loading')
         try {
           const existing = await listRestaurants(user.userId)
+          const token = await getAccessToken()
           const res = await fetch('/api/nearby-recommendations', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
             body: JSON.stringify({
               lat: position.coords.latitude,
               lng: position.coords.longitude,
@@ -123,13 +127,31 @@ export default function RecommendationsPage() {
           {recommendations.map((r) => (
             <div key={r.id} className="rounded-3xl bg-white p-5 shadow-sm shadow-black/5">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-display text-base">
-                <span>{r.name}</span>
+                {r.placeUrl ? (
+                  <a
+                    href={r.placeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2"
+                  >
+                    {r.name}
+                  </a>
+                ) : (
+                  <span>{r.name}</span>
+                )}
                 <span className="text-sm text-ink/50">| {r.category}</span>
                 <span className="text-sm text-ink/50">| {r.distance}m</span>
               </div>
               {r.blurb && <p className="mt-2 text-sm">{r.blurb}</p>}
               <p className="mt-1 text-sm text-ink/50">{r.address}</p>
-              <div className="mt-3 flex justify-end">
+              <div className="mt-3 flex justify-end gap-2">
+                {r.placeUrl && (
+                  <a href={r.placeUrl} target="_blank" rel="noopener noreferrer">
+                    <PillButton variant="outline" type="button">
+                      카카오맵에서 보기
+                    </PillButton>
+                  </a>
+                )}
                 <Link
                   href={`/restaurants/new?name=${encodeURIComponent(r.name)}&address=${encodeURIComponent(r.address)}`}
                 >

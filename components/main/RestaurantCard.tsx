@@ -45,7 +45,12 @@ export function RestaurantCard({
           <Link href={`/restaurants/${restaurant.id}/edit`} className="text-edit">
             수정
           </Link>
-          <button onClick={() => onDelete(restaurant.id)} className="text-delete">
+          <button
+            onClick={() => {
+              if (window.confirm(`'${restaurant.name}'을(를) 삭제할까요?`)) onDelete(restaurant.id)
+            }}
+            className="text-delete"
+          >
             삭제
           </button>
         </div>

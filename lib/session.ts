@@ -16,6 +16,11 @@ export async function getCurrentUser(): Promise<AppUser | null> {
   return toAppUser(data.session?.user)
 }
 
+export async function getAccessToken(): Promise<string | null> {
+  const { data } = await supabase.auth.getSession()
+  return data.session?.access_token ?? null
+}
+
 export function subscribeAuth(callback: (user: AppUser | null) => void) {
   const { data } = supabase.auth.onAuthStateChange((_event, session) => {
     callback(toAppUser(session?.user))

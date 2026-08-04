@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
 const KAKAO_CATEGORY_URL = 'https://dapi.kakao.com/v2/local/search/category.json'
 const GEMINI_URL =
@@ -82,6 +83,12 @@ async function fetchBlurbs(candidates: KakaoDocument[], apiKey: string) {
 }
 
 export async function POST(req: NextRequest) {
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
+  const { data: userData } = token ? await supabase.auth.getUser(token) : { data: { user: null } }
+  if (!userData.user) {
+    return NextResponse.json({ error: '로그인이 필요해요.' }, { status: 401 })
+  }
+
   const kakaoKey = process.env.KAKAO_REST_API_KEY
   const geminiKey = process.env.Gemini_API
   if (!kakaoKey || !geminiKey) {
