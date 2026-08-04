@@ -21,6 +21,8 @@ function NewRestaurantPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const defaultCategoryId = searchParams.get('categoryId') ?? undefined
+  const defaultName = searchParams.get('name') ?? undefined
+  const defaultAddress = searchParams.get('address') ?? undefined
   const [user, setUser] = useState<AppUser | null | undefined>(undefined)
   const [categories, setCategories] = useState<Category[] | undefined>(undefined)
 
@@ -57,6 +59,8 @@ function NewRestaurantPageContent() {
     <RestaurantForm
       categories={categories ?? []}
       defaultCategoryId={defaultCategoryId}
+      defaultName={defaultName}
+      defaultAddress={defaultAddress}
       onSubmit={async (input) => {
         await createRestaurant(user.userId, input)
         router.push('/')

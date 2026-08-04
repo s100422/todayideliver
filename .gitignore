@@ -29,6 +29,9 @@ yarn-error.log*
 .env*.local
 .env
 
+# API keys dropped locally by the user
+/Token/
+
 # vercel
 .vercel
 

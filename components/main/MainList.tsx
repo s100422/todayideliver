@@ -60,6 +60,11 @@ export function MainList({ user }: { user: AppUser }) {
                 음식점 등록 ＋
               </PillButton>
             </Link>
+            <Link href="/recommendations">
+              <PillButton variant="outline" className="w-full">
+                내 주변 추천 📍
+              </PillButton>
+            </Link>
             <button
               type="button"
               onClick={() => signOut()}

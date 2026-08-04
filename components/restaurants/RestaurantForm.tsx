@@ -30,6 +30,8 @@ export function RestaurantForm({
   categories,
   initialValues,
   defaultCategoryId,
+  defaultName,
+  defaultAddress,
   onSubmit,
   title = '음식점 등록',
   extraAction,
@@ -37,12 +39,19 @@ export function RestaurantForm({
   categories: Category[]
   initialValues?: RestaurantFormValues
   defaultCategoryId?: string
+  defaultName?: string
+  defaultAddress?: string
   onSubmit: (input: RestaurantInput) => Promise<void>
   title?: string
   extraAction?: React.ReactNode
 }) {
   const [values, setValues] = useState<RestaurantFormValues>(
-    initialValues ?? { ...EMPTY_VALUES, categoryId: defaultCategoryId ?? '' }
+    initialValues ?? {
+      ...EMPTY_VALUES,
+      categoryId: defaultCategoryId ?? '',
+      name: defaultName ?? '',
+      address: defaultAddress ?? '',
+    }
   )
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
