@@ -6,41 +6,42 @@ import { useEffect, useState } from 'react'
 import { PillButton } from '@/components/ui'
 import { RestaurantForm, type RestaurantFormValues } from '@/components/restaurants/RestaurantForm'
 import { listCategories, type Category } from '@/lib/categories'
-import { getLocalUser, type LocalUser } from '@/lib/localUser'
 import { deleteRestaurant, getRestaurant, updateRestaurant } from '@/lib/restaurants'
+import { getCurrentUser, type AppUser } from '@/lib/session'
 
 export default function EditRestaurantPage() {
   const router = useRouter()
   const params = useParams<{ id: string }>()
   const restaurantId = Number(params.id)
 
-  const [user, setUser] = useState<LocalUser | null | undefined>(undefined)
+  const [user, setUser] = useState<AppUser | null | undefined>(undefined)
   const [categories, setCategories] = useState<Category[] | undefined>(undefined)
   const [initialValues, setInitialValues] = useState<RestaurantFormValues | null | undefined>(undefined)
 
   useEffect(() => {
-    const localUser = getLocalUser()
-    setUser(localUser)
-    if (!localUser) return
+    getCurrentUser().then((currentUser) => {
+      setUser(currentUser)
+      if (!currentUser) return
 
-    Promise.all([listCategories(localUser.userId), getRestaurant(restaurantId)]).then(
-      ([cats, restaurant]) => {
-        setCategories(cats)
-        if (!restaurant || restaurant.user_id !== localUser.userId) {
-          setInitialValues(null)
-          return
+      Promise.all([listCategories(currentUser.userId), getRestaurant(restaurantId)]).then(
+        ([cats, restaurant]) => {
+          setCategories(cats)
+          if (!restaurant || restaurant.user_id !== currentUser.userId) {
+            setInitialValues(null)
+            return
+          }
+          setInitialValues({
+            name: restaurant.name,
+            address: restaurant.address ?? '',
+            categoryId: String(restaurant.category_id),
+            usedDelivery: restaurant.used_delivery,
+            score: restaurant.score != null ? String(restaurant.score) : '',
+            review: restaurant.review ?? '',
+            memo: restaurant.memo ?? '',
+          })
         }
-        setInitialValues({
-          name: restaurant.name,
-          address: restaurant.address ?? '',
-          categoryId: String(restaurant.category_id),
-          usedDelivery: restaurant.used_delivery,
-          score: restaurant.score != null ? String(restaurant.score) : '',
-          review: restaurant.review ?? '',
-          memo: restaurant.memo ?? '',
-        })
-      }
-    )
+      )
+    })
   }, [restaurantId])
 
   if (user === undefined || (user && initialValues === undefined)) {

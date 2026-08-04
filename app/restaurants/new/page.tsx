@@ -6,8 +6,8 @@ import { Suspense, useEffect, useState } from 'react'
 import { PillButton } from '@/components/ui'
 import { RestaurantForm } from '@/components/restaurants/RestaurantForm'
 import { listCategories, type Category } from '@/lib/categories'
-import { getLocalUser, type LocalUser } from '@/lib/localUser'
 import { createRestaurant } from '@/lib/restaurants'
+import { getCurrentUser, type AppUser } from '@/lib/session'
 
 export default function NewRestaurantPage() {
   return (
@@ -21,15 +21,16 @@ function NewRestaurantPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const defaultCategoryId = searchParams.get('categoryId') ?? undefined
-  const [user, setUser] = useState<LocalUser | null | undefined>(undefined)
+  const [user, setUser] = useState<AppUser | null | undefined>(undefined)
   const [categories, setCategories] = useState<Category[] | undefined>(undefined)
 
   useEffect(() => {
-    const localUser = getLocalUser()
-    setUser(localUser)
-    if (localUser) {
-      listCategories(localUser.userId).then(setCategories)
-    }
+    getCurrentUser().then((u) => {
+      setUser(u)
+      if (u) {
+        listCategories(u.userId).then(setCategories)
+      }
+    })
   }, [])
 
   if (user === undefined || (user && categories === undefined)) {

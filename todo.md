@@ -50,9 +50,11 @@
 - [x] 메인 리스트 헤더 영상(`main-header-animation.mp4`)에 체크무늬 배경이 있는 다른 장면(택배기사+문 씬)이 섞여 있던 문제 수정 — 오토바이만 나오는 구간(0~1.45초)만 남기고 트리밍
 
 ## 9단계 — 로그인 도입 (이메일/비밀번호, Supabase Auth)
-- [ ] Supabase Auth 이메일/비밀번호 로그인 활성화 확인
-- [ ] 로그인/회원가입 화면 추가, 온보딩 최상단 진입점으로 배치 (로그인 필수)
-- [ ] `categories`/`restaurants` RLS 정책을 `auth.uid()` 기준으로 변경
-- [ ] `lib/localUser.ts`를 실제 로그인 세션(Supabase Auth) 기반으로 교체
-- [ ] 첫 로그인 시 이 브라우저의 기존 localStorage user_id 데이터를 새 계정 id로 자동 이전
-- [ ] 로그아웃 기능 추가
+- [x] Supabase Auth 이메일/비밀번호 로그인 활성화 확인 (이메일 확인 필수가 기본값 — 가입 후 메일 확인 필요)
+- [x] 로그인/회원가입 화면 추가 (`components/auth/AuthStep.tsx`), 온보딩 최상단 진입점으로 배치 (로그인 필수)
+- [x] `categories`/`restaurants` RLS 정책을 `auth.uid()` 기준으로 변경 (마이그레이션: `require_auth_for_categories_and_restaurants`)
+- [x] `lib/localUser.ts` 대신 `lib/session.ts`(Supabase Auth 세션 기반)로 교체, 페이지 라우팅은 `app/page.tsx`에서 세션+카테고리 존재 여부로 분기
+- [x] 첫 로그인 시 이 브라우저의 기존 localStorage user_id 데이터를 새 계정 id로 자동 이전 (`migrate_local_data` RPC, SECURITY DEFINER)
+- [x] 로그아웃 기능 추가 (MainList 상단)
+- [x] 신규 가입 → 로그아웃 → 로그인(다른 localStorage 상태에서) 시 데이터 유지되는지 실제 테스트로 확인
+- [ ] **확인 필요**: DB에 예전 localStorage 기반으로 만들어진, 서로 다른 user_id에 흩어진 데이터 뭉치가 여러 개 남아있음 (아마 실사용자의 예전 세션들) — 어떻게 복구/통합할지 사용자 확인 필요

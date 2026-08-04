@@ -12,11 +12,11 @@ import {
   updateCategory,
   type Category,
 } from '@/lib/categories'
-import { getLocalUser, type LocalUser } from '@/lib/localUser'
+import { getCurrentUser, type AppUser } from '@/lib/session'
 
 export default function CategoriesPage() {
   const router = useRouter()
-  const [user, setUser] = useState<LocalUser | null | undefined>(undefined)
+  const [user, setUser] = useState<AppUser | null | undefined>(undefined)
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -29,9 +29,10 @@ export default function CategoriesPage() {
   }
 
   useEffect(() => {
-    const localUser = getLocalUser()
-    setUser(localUser)
-    if (localUser) refresh(localUser.userId)
+    getCurrentUser().then((u) => {
+      setUser(u)
+      if (u) refresh(u.userId)
+    })
   }, [])
 
   if (user === undefined || loading) {

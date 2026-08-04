@@ -5,14 +5,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { TransparentVideo } from '@/components/icons/TransparentVideo'
 import { PillButton } from '@/components/ui'
 import { listCategories, type Category } from '@/lib/categories'
-import type { LocalUser } from '@/lib/localUser'
 import { deleteRestaurant, listRestaurants, type Restaurant, type SortOption } from '@/lib/restaurants'
+import { signOut, type AppUser } from '@/lib/session'
 import { CategoryChips } from './CategoryChips'
 import { EmptyState } from './EmptyState'
 import { RestaurantCard } from './RestaurantCard'
 import { SortDropdown } from './SortDropdown'
 
-export function MainList({ user }: { user: LocalUser }) {
+export function MainList({ user }: { user: AppUser }) {
   const [categories, setCategories] = useState<Category[]>([])
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
@@ -60,6 +60,13 @@ export function MainList({ user }: { user: LocalUser }) {
                 음식점 등록 ＋
               </PillButton>
             </Link>
+            <button
+              type="button"
+              onClick={() => signOut()}
+              className="text-xs text-ink/40 underline"
+            >
+              로그아웃
+            </button>
           </div>
         </div>
 

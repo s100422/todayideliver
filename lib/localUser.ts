@@ -16,10 +16,6 @@ export function getLocalUser(): LocalUser | null {
   }
 }
 
-export function saveLocalUser(user: LocalUser) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
-}
-
-export function createUserId(): string {
-  return crypto.randomUUID()
+export function clearLocalUser() {
+  localStorage.removeItem(STORAGE_KEY)
 }
