@@ -113,19 +113,33 @@ export function Card({ className, children }: { className?: string; children: Re
   )
 }
 
-const FOOD_LOADING_FRAMES = ['🥭', '🥭🍗', '🥭🍗🍝']
+const FOOD_EMOJI_POOL = [
+  '🍔', '🍕', '🍗', '🍜', '🍣', '🌮', '🍩', '🍦', '🥐', '🍟',
+  '🌭', '🥗', '🍰', '🍪', '🍿', '🥟', '🍙', '🍤', '🥞', '🥪',
+]
+
+function pickRandomFoods(count: number) {
+  const pool = [...FOOD_EMOJI_POOL]
+  const picked: string[] = []
+  for (let i = 0; i < count; i++) {
+    picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0])
+  }
+  return picked
+}
 
 export function FoodLoading({ label, className }: { label: string; className?: string }) {
+  const [foods] = useState(() => pickRandomFoods(3))
   const [frame, setFrame] = useState(0)
 
   useEffect(() => {
-    const id = setInterval(() => setFrame((f) => (f + 1) % FOOD_LOADING_FRAMES.length), 500)
+    const id = setInterval(() => setFrame((f) => (f + 1) % (foods.length + 1)), 500)
     return () => clearInterval(id)
-  }, [])
+  }, [foods.length])
 
   return (
-    <p className={cn('py-16 text-center text-ink/60', className)}>
-      {label} {FOOD_LOADING_FRAMES[frame]}
+    <p className={cn('flex items-center justify-center gap-1 py-16 text-ink/60', className)}>
+      <span>{label}</span>
+      <span className="inline-block w-16 text-left">{foods.slice(0, frame).join('')}</span>
     </p>
   )
 }
