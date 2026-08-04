@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DeliveryAnimation } from '@/components/icons/DeliveryAnimation'
-import { Input, PillButton } from '@/components/ui'
+import { BackButton, Input, PillButton } from '@/components/ui'
 import {
   createCategories,
   deleteCategory,
@@ -70,7 +70,8 @@ export default function CategoriesPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center gap-6 p-6 pb-16 text-center">
+    <main className="relative mx-auto flex min-h-screen max-w-lg flex-col items-center gap-6 p-6 pb-16 text-center">
+      <BackButton className="absolute left-6 top-6" />
       <h1 className="font-display text-4xl leading-tight">카테고리 수정</h1>
 
       <div className="w-full space-y-3 text-left">

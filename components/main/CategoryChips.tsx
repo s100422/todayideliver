@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 import { Chip } from '@/components/ui'
 import type { Category } from '@/lib/categories'
 
@@ -13,8 +16,59 @@ export function CategoryChips({
   onSelect: (id: number | null) => void
   addHref: string
 }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const drag = useRef({ active: false, moved: false, startX: 0, startScrollLeft: 0 })
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    function onWheel(e: WheelEvent) {
+      if (el!.scrollWidth <= el!.clientWidth) return
+      e.preventDefault()
+      el!.scrollLeft += e.deltaY !== 0 ? e.deltaY : e.deltaX
+    }
+
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [])
+
+  function onMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    const el = scrollRef.current
+    if (!el) return
+    drag.current = { active: true, moved: false, startX: e.clientX, startScrollLeft: el.scrollLeft }
+  }
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const el = scrollRef.current
+    if (!el || !drag.current.active) return
+    const delta = e.clientX - drag.current.startX
+    if (Math.abs(delta) > 4) drag.current.moved = true
+    el.scrollLeft = drag.current.startScrollLeft - delta
+  }
+
+  function endDrag() {
+    drag.current.active = false
+  }
+
+  function onClickCapture(e: React.MouseEvent<HTMLDivElement>) {
+    if (drag.current.moved) {
+      e.preventDefault()
+      e.stopPropagation()
+      drag.current.moved = false
+    }
+  }
+
   return (
-    <div className="no-scrollbar flex items-center gap-3 overflow-x-auto">
+    <div
+      ref={scrollRef}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={endDrag}
+      onMouseLeave={endDrag}
+      onClickCapture={onClickCapture}
+      className="no-scrollbar flex cursor-grab items-center gap-3 overflow-x-auto active:cursor-grabbing"
+    >
       <div className="sticky left-0 z-10 flex shrink-0 items-center gap-3 bg-paper pr-3">
         <Chip active={selectedId === null} onClick={() => onSelect(null)}>
           전체

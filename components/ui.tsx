@@ -1,3 +1,6 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { ButtonHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 
 function cn(...classes: Array<string | false | undefined>) {
@@ -39,6 +42,23 @@ export function Chip({
       )}
       {...props}
     />
+  )
+}
+
+export function BackButton({ className }: { className?: string }) {
+  const router = useRouter()
+  return (
+    <button
+      type="button"
+      onClick={() => router.back()}
+      aria-label="뒤로가기"
+      className={cn(
+        'flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-lg text-ink shadow-sm shadow-black/5 transition active:scale-95',
+        className
+      )}
+    >
+      ←
+    </button>
   )
 }
 

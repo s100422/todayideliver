@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Input, PillButton, Select, Textarea } from '@/components/ui'
+import { BackButton, Input, PillButton, Select, Textarea } from '@/components/ui'
 import type { Category } from '@/lib/categories'
 import type { RestaurantInput } from '@/lib/restaurants'
 
@@ -86,7 +86,10 @@ export function RestaurantForm({
 
   return (
     <main className="mx-auto max-w-lg space-y-6 p-6 pb-16">
-      <h1 className="font-display text-3xl">{title}</h1>
+      <div className="flex items-center gap-3">
+        <BackButton />
+        <h1 className="font-display text-3xl">{title}</h1>
+      </div>
 
       <FormRow label="음식점 이름">
         <Input
