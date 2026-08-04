@@ -41,10 +41,10 @@ export function Chip({
   return (
     <button
       className={cn(
-        'flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-full text-center font-display text-sm leading-tight transition active:translate-y-[3px] active:shadow-none',
+        'flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-full text-center font-display text-sm leading-tight transition active:translate-y-[2px] active:shadow-none',
         active
-          ? 'bg-gradient-to-b from-[#3a352c] to-ink text-paper shadow-[0_4px_0_#000,0_7px_12px_rgba(0,0,0,0.35)]'
-          : 'bg-gradient-to-b from-accent-light to-accent text-white shadow-[0_4px_0_var(--color-accent-dark),0_7px_12px_rgba(0,0,0,0.2)]',
+          ? 'bg-gradient-to-b from-[#3a352c] to-ink text-paper shadow-[0_2px_0_#000,0_3px_6px_rgba(0,0,0,0.35)]'
+          : 'bg-gradient-to-b from-accent-light to-accent text-white shadow-[0_2px_0_var(--color-accent-dark),0_3px_6px_rgba(0,0,0,0.2)]',
         className
       )}
       {...props}

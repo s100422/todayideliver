@@ -64,6 +64,11 @@ export default function EditRestaurantPage() {
     )
   }
 
+  if (!initialValues) {
+    return null
+  }
+  const restaurantName = initialValues.name
+
   return (
     <RestaurantForm
       title="음식점 수정"
@@ -78,6 +83,7 @@ export default function EditRestaurantPage() {
           variant="muted"
           type="button"
           onClick={async () => {
+            if (!window.confirm(`'${restaurantName}'을(를) 삭제할까요?`)) return
             await deleteRestaurant(restaurantId)
             router.push('/')
           }}

@@ -14,7 +14,7 @@ function translateAuthError(message: string): string {
 }
 
 export function AuthStep({ onAuthed }: { onAuthed: () => void }) {
-  const [mode, setMode] = useState<'login' | 'signup'>('signup')
+  const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [nickname, setNickname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

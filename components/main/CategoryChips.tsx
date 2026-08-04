@@ -69,7 +69,8 @@ export function CategoryChips({
       onClickCapture={onClickCapture}
       className="no-scrollbar flex cursor-grab items-center gap-3 overflow-x-auto pb-5 active:cursor-grabbing"
     >
-      <div className="sticky left-0 z-10 flex shrink-0 items-center gap-3 bg-paper pr-3">
+      <div className="sticky left-0 z-10 flex shrink-0 items-center gap-3">
+        <div className="absolute inset-0 -bottom-5 -z-10 bg-paper [-webkit-mask-image:linear-gradient(to_right,black_calc(100%_-_12px),transparent)] [mask-image:linear-gradient(to_right,black_calc(100%_-_12px),transparent)]" />
         <Chip active={selectedId === null} onClick={() => onSelect(null)}>
           전체
           <br />
@@ -84,7 +85,7 @@ export function CategoryChips({
       ))}
       <Link
         href={addHref}
-        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-center font-display text-sm text-ink shadow-[0_4px_0_rgba(0,0,0,0.1),0_7px_12px_rgba(0,0,0,0.12)] transition active:translate-y-[3px] active:shadow-none"
+        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-center font-display text-sm text-ink shadow-[0_2px_0_rgba(0,0,0,0.1),0_3px_6px_rgba(0,0,0,0.12)] transition active:translate-y-[2px] active:shadow-none"
       >
         ＋
       </Link>

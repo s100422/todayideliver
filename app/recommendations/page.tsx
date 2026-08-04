@@ -146,7 +146,15 @@ export default function RecommendationsPage() {
       )}
 
       {(status === 'locating' || status === 'loading') && (
-        <FoodLoading label={status === 'locating' ? '위치를 확인하는 중' : '주변 음식 찾는 중!'} />
+        <FoodLoading
+          label={
+            status === 'locating'
+              ? '위치를 확인하는 중'
+              : activeFoodQuery
+                ? `주변 맛집 '${activeFoodQuery}' 검색중`
+                : '주변 음식 찾는 중!'
+          }
+        />
       )}
 
       {status === 'error' && (

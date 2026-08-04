@@ -59,19 +59,12 @@ export function MainList({ user }: { user: AppUser }) {
                 음식점 등록 ＋
               </PillButton>
             </Link>
-            <button
-              type="button"
-              onClick={() => signOut()}
-              className="text-xs text-ink/40 underline"
-            >
-              로그아웃
-            </button>
           </div>
         </div>
 
         <Link
           href="/recommendations"
-          className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-gradient-to-b from-accent-light to-accent px-6 py-5 text-white shadow-[0_4px_0_var(--color-accent-dark),0_7px_12px_rgba(0,0,0,0.2)] transition active:translate-y-[3px] active:shadow-none"
+          className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-gradient-to-b from-accent-light to-accent px-6 py-5 text-white shadow-[0_2px_0_var(--color-accent-dark),0_3px_6px_rgba(0,0,0,0.2)] transition active:translate-y-[2px] active:shadow-none"
         >
           <span className="font-display text-lg">내 주변 맛집 둘러보기</span>
           <span className="text-2xl">📍</span>
@@ -116,6 +109,18 @@ export function MainList({ user }: { user: AppUser }) {
             </div>
           </>
         )}
+
+        <div className="mt-20 flex justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              if (window.confirm('로그아웃 할까요?')) signOut()
+            }}
+            className="text-xs text-ink/40 underline"
+          >
+            로그아웃
+          </button>
+        </div>
       </div>
     </main>
   )
