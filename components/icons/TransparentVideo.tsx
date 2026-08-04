@@ -8,7 +8,15 @@ const OPAQUE_BELOW = 140
 const TRANSPARENT_ABOVE = 185
 const FRAME_INTERVAL_MS = 1000 / 30
 
-export function TransparentVideo({ src, className }: { src: string; className?: string }) {
+export function TransparentVideo({
+  src,
+  className,
+  tint,
+}: {
+  src: string
+  className?: string
+  tint?: [number, number, number]
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -38,6 +46,11 @@ export function TransparentVideo({ src, className }: { src: string; className?: 
             const t = (brightness - OPAQUE_BELOW) / (TRANSPARENT_ABOVE - OPAQUE_BELOW)
             const keepFraction = 1 - Math.min(1, Math.max(0, t))
             data[i + 3] = Math.round(data[i + 3] * keepFraction)
+            if (tint) {
+              data[i] = (r * tint[0]) / 255
+              data[i + 1] = (g * tint[1]) / 255
+              data[i + 2] = (b * tint[2]) / 255
+            }
           }
         }
         ctx.putImageData(frame, 0, 0)
@@ -46,7 +59,7 @@ export function TransparentVideo({ src, className }: { src: string; className?: 
     const interval = setInterval(draw, FRAME_INTERVAL_MS)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [tint])
 
   return (
     <div className={`relative aspect-video overflow-hidden ${className ?? ''}`}>

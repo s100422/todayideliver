@@ -92,7 +92,7 @@ export function AuthStep({ onAuthed }: { onAuthed: () => void }) {
         {error && <p className="text-sm text-delete">{error}</p>}
         {info && <p className="text-sm text-ink/70">{info}</p>}
 
-        <PillButton type="submit" className="w-full" disabled={submitting}>
+        <PillButton type="submit" variant="accent" className="w-full" disabled={submitting}>
           {submitting ? '처리 중…' : mode === 'signup' ? '가입하고 시작하기' : '로그인'}
         </PillButton>
       </form>
@@ -109,7 +109,7 @@ export function AuthStep({ onAuthed }: { onAuthed: () => void }) {
         {mode === 'signup' ? '이미 계정이 있으신가요? 로그인' : '처음이신가요? 회원가입'}
       </button>
 
-      <DeliveryAnimation className="w-48" />
+      <DeliveryAnimation className="w-48" tint={[56, 180, 106]} />
     </main>
   )
 }

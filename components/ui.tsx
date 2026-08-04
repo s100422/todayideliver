@@ -18,7 +18,7 @@ export function PillButton({
   variant = 'solid',
   className,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'solid' | 'outline' | 'muted' }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'solid' | 'outline' | 'muted' | 'accent' }) {
   return (
     <button
       className={cn(
@@ -26,6 +26,7 @@ export function PillButton({
         variant === 'solid' && 'bg-ink text-paper',
         variant === 'outline' && 'bg-white text-ink shadow-sm shadow-black/5 border border-black/5',
         variant === 'muted' && 'bg-black/10 text-ink/60',
+        variant === 'accent' && 'bg-accent text-white',
         className
       )}
       {...props}

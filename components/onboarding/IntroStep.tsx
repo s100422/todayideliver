@@ -15,9 +15,11 @@ export function IntroStep({ onNext }: { onNext: () => void }) {
         <br />
         배달이다!
       </h1>
-      <DeliveryAnimation className="w-64" />
+      <DeliveryAnimation className="w-64" tint={[56, 180, 106]} />
       <p className="font-script text-xl text-ink/70">&quot;{quote}&quot;</p>
-      <PillButton onClick={onNext}>시작하기</PillButton>
+      <PillButton variant="accent" onClick={onNext}>
+        시작하기
+      </PillButton>
     </main>
   )
 }
