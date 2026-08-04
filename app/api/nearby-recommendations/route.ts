@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
 const KAKAO_CATEGORY_URL = 'https://dapi.kakao.com/v2/local/search/category.json'
+const KAKAO_KEYWORD_URL = 'https://dapi.kakao.com/v2/local/search/keyword.json'
 const GEMINI_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
 const RESTAURANT_CATEGORY_CODE = 'FD6'
@@ -28,6 +29,15 @@ type ExistingRestaurant = {
 
 function normalize(value: string) {
   return value.replace(/\s+/g, '')
+}
+
+function sampleRandom<T>(items: T[], count: number): T[] {
+  const shuffled = [...items]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled.slice(0, count)
 }
 
 function isAlreadyRegistered(candidate: KakaoDocument, existing: ExistingRestaurant[]) {
@@ -101,25 +111,28 @@ export async function POST(req: NextRequest) {
     lat?: number
     lng?: number
     existing?: ExistingRestaurant[]
+    foodQuery?: string
   }
-  const { lat, lng, existing = [] } = body
+  const { lat, lng, existing = [], foodQuery } = body
 
   if (typeof lat !== 'number' || typeof lng !== 'number') {
     return NextResponse.json({ error: '위치 정보가 필요해요.' }, { status: 400 })
   }
 
-  const kakaoRes = await fetch(
-    `${KAKAO_CATEGORY_URL}?category_group_code=${RESTAURANT_CATEGORY_CODE}&x=${lng}&y=${lat}&radius=${SEARCH_RADIUS_METERS}&size=15&sort=distance`,
-    { headers: { Authorization: `KakaoAK ${kakaoKey}` } }
-  )
+  const kakaoUrl = foodQuery
+    ? `${KAKAO_KEYWORD_URL}?query=${encodeURIComponent(foodQuery)}&category_group_code=${RESTAURANT_CATEGORY_CODE}&x=${lng}&y=${lat}&radius=${SEARCH_RADIUS_METERS}&size=15&sort=distance`
+    : `${KAKAO_CATEGORY_URL}?category_group_code=${RESTAURANT_CATEGORY_CODE}&x=${lng}&y=${lat}&radius=${SEARCH_RADIUS_METERS}&size=15&sort=distance`
+
+  const kakaoRes = await fetch(kakaoUrl, { headers: { Authorization: `KakaoAK ${kakaoKey}` } })
   if (!kakaoRes.ok) {
     return NextResponse.json({ error: '주변 음식점을 찾지 못했어요.' }, { status: 502 })
   }
 
   const kakaoData = (await kakaoRes.json()) as { documents: KakaoDocument[] }
-  const candidates = kakaoData.documents
-    .filter((doc) => !isAlreadyRegistered(doc, existing))
-    .slice(0, MAX_CANDIDATES)
+  const nearby = kakaoData.documents.filter((doc) => !isAlreadyRegistered(doc, existing))
+  const candidates = sampleRandom(nearby, MAX_CANDIDATES).sort(
+    (a, b) => Number(a.distance) - Number(b.distance)
+  )
 
   if (candidates.length === 0) {
     return NextResponse.json({ recommendations: [] })

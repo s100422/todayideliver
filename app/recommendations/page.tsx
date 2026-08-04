@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { MapView } from '@/components/recommendations/MapView'
-import { BackButton, FoodLoading, PillButton } from '@/components/ui'
+import { BackButton, FoodLoading, Input, PillButton } from '@/components/ui'
 import { listRestaurants } from '@/lib/restaurants'
 import { getAccessToken, getCurrentUser, type AppUser } from '@/lib/session'
 
@@ -21,7 +21,7 @@ type Recommendation = {
   blurb: string
 }
 
-type Status = 'idle' | 'locating' | 'loading' | 'done' | 'error'
+type Status = 'idle' | 'asking' | 'locating' | 'loading' | 'done' | 'error'
 
 export default function RecommendationsPage() {
   const router = useRouter()
@@ -30,6 +30,8 @@ export default function RecommendationsPage() {
   const [error, setError] = useState('')
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
   const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [foodQuery, setFoodQuery] = useState('')
+  const [activeFoodQuery, setActiveFoodQuery] = useState('')
 
   useEffect(() => {
     getCurrentUser().then(setUser)
@@ -48,8 +50,9 @@ export default function RecommendationsPage() {
     return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, options))
   }
 
-  async function fetchRecommendations() {
+  async function fetchRecommendations(query?: string) {
     if (!user) return
+    setActiveFoodQuery(query ?? '')
     setStatus('locating')
     setError('')
 
@@ -93,6 +96,7 @@ export default function RecommendationsPage() {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
           existing: existing.map((r) => ({ name: r.name, address: r.address })),
+          ...(query ? { foodQuery: query } : {}),
         }),
       })
       if (!res.ok) throw new Error('failed')
@@ -109,7 +113,7 @@ export default function RecommendationsPage() {
     <main className="mx-auto max-w-lg space-y-6 p-6 pb-16">
       <div className="flex items-center gap-3">
         <BackButton />
-        <h1 className="font-display text-3xl">내 주변 추천</h1>
+        <h1 className="font-display text-3xl">내 주변 맛집</h1>
       </div>
 
       {status === 'idle' && (
@@ -119,7 +123,25 @@ export default function RecommendationsPage() {
             <br />
             추천받아볼까요?
           </p>
-          <PillButton onClick={fetchRecommendations}>추천 받기</PillButton>
+          <PillButton onClick={() => setStatus('asking')}>추천 받기</PillButton>
+        </div>
+      )}
+
+      {status === 'asking' && (
+        <div className="flex flex-col items-center gap-4 py-16 text-center">
+          <p className="font-display text-lg leading-relaxed">원하는 음식이 있나요?</p>
+          <Input
+            placeholder="예: 치킨, 마라탕..."
+            value={foodQuery}
+            onChange={(e) => setFoodQuery(e.target.value)}
+            className="max-w-xs"
+          />
+          <PillButton onClick={() => fetchRecommendations(foodQuery.trim() || undefined)}>
+            이 음식으로 찾기
+          </PillButton>
+          <PillButton variant="outline" onClick={() => fetchRecommendations()}>
+            아니! 그냥 랜덤으로 식당 추천해줘!
+          </PillButton>
         </div>
       )}
 
@@ -130,14 +152,23 @@ export default function RecommendationsPage() {
       {status === 'error' && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
           <p className="text-sm text-delete">{error}</p>
-          <PillButton variant="outline" onClick={fetchRecommendations}>
+          <PillButton variant="outline" onClick={() => fetchRecommendations(activeFoodQuery || undefined)}>
             다시 시도
           </PillButton>
         </div>
       )}
 
       {status === 'done' && recommendations.length === 0 && (
-        <p className="py-16 text-center text-ink/60">근처에 새로 추천할 음식점을 못 찾았어요.</p>
+        <div className="flex flex-col items-center gap-4 py-16 text-center">
+          <p className="text-ink/60">
+            {activeFoodQuery
+              ? `'${activeFoodQuery}'은(는) '${user.nickname}' 님 주변에 없어요!ㅠㅠ`
+              : '근처에 새로 추천할 음식점을 못 찾았어요.'}
+          </p>
+          <PillButton variant="outline" onClick={() => setStatus('asking')}>
+            다른 음식으로 다시 찾기
+          </PillButton>
+        </div>
       )}
 
       {status === 'done' && recommendations.length > 0 && myLocation && (
