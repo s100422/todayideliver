@@ -10,6 +10,10 @@
   --color-edit: #3d6bdb;
   --color-delete: #e2543f;
   --color-check: #f6c945;
+
+  --color-accent-light: #ffa15c;
+  --color-accent: #f5822e;
+  --color-accent-dark: #c85f16;
 }
 
 html {
@@ -17,6 +21,10 @@ html {
 }
 
 body {
+  background-color: #d8d3c6;
+}
+
+.app-frame {
   background-color: var(--color-paper);
   color: var(--color-ink);
 }

@@ -28,7 +28,7 @@ export function CategoryChips({
       ))}
       <Link
         href={addHref}
-        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-center font-display text-sm text-ink shadow-sm shadow-black/5 transition active:scale-95"
+        className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white text-center font-display text-sm text-ink shadow-[0_4px_0_rgba(0,0,0,0.1),0_7px_12px_rgba(0,0,0,0.12)] transition active:translate-y-[3px] active:shadow-none"
       >
         ＋
       </Link>

@@ -27,15 +27,19 @@ export function RestaurantCard({
 
       {restaurant.used_delivery && restaurant.review && (
         <div className="mt-3">
-          <p className="text-sm font-medium text-ink/70">리뷰</p>
-          <p className="whitespace-pre-wrap text-sm">{restaurant.review}</p>
+          <span className="inline-block rounded-full bg-accent px-3 py-0.5 font-display text-xs text-white">
+            리뷰
+          </span>
+          <p className="mt-1 whitespace-pre-wrap text-sm">{restaurant.review}</p>
         </div>
       )}
 
       <div className="mt-3 flex items-end justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-ink/70">특이사항</p>
-          <p className="whitespace-pre-wrap text-sm">{restaurant.memo || '-'}</p>
+          <span className="inline-block rounded-full bg-accent px-3 py-0.5 font-display text-xs text-white">
+            특이사항
+          </span>
+          <p className="mt-1 whitespace-pre-wrap text-sm">{restaurant.memo || '-'}</p>
         </div>
         <div className="flex shrink-0 gap-3 text-sm font-medium">
           <Link href={`/restaurants/${restaurant.id}/edit`} className="text-edit">
