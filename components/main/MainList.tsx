@@ -37,6 +37,9 @@ export function MainList({ user }: { user: LocalUser }) {
     return categories.find((c) => c.id === id)?.name ?? ''
   }
 
+  const addRestaurantHref =
+    selectedCategoryId != null ? `/restaurants/new?categoryId=${selectedCategoryId}` : '/restaurants/new'
+
   return (
     <main className="min-h-screen">
       <div className="p-6">
@@ -78,21 +81,28 @@ export function MainList({ user }: { user: LocalUser }) {
         </div>
 
         {loading ? null : restaurants.length === 0 ? (
-          <EmptyState />
+          <EmptyState href={addRestaurantHref} />
         ) : (
-          <div className="space-y-4">
-            {restaurants.map((r) => (
-              <RestaurantCard
-                key={r.id}
-                restaurant={r}
-                categoryName={categoryName(r.category_id)}
-                onDelete={async (id) => {
-                  await deleteRestaurant(id)
-                  await refresh()
-                }}
-              />
-            ))}
-          </div>
+          <>
+            <div className="space-y-4">
+              {restaurants.map((r) => (
+                <RestaurantCard
+                  key={r.id}
+                  restaurant={r}
+                  categoryName={categoryName(r.category_id)}
+                  onDelete={async (id) => {
+                    await deleteRestaurant(id)
+                    await refresh()
+                  }}
+                />
+              ))}
+            </div>
+            <div className="mt-6 flex justify-center">
+              <Link href={addRestaurantHref}>
+                <PillButton variant="outline">음식점 추가 ＋</PillButton>
+              </Link>
+            </div>
+          </>
         )}
       </div>
     </main>

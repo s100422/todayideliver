@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { PillButton } from '@/components/ui'
 
-export function EmptyState() {
+export function EmptyState({ href = '/restaurants/new' }: { href?: string }) {
   return (
     <div className="flex flex-col items-center gap-4 py-16 text-center">
       <p className="font-display text-lg leading-relaxed">
@@ -9,7 +9,7 @@ export function EmptyState() {
         <br />
         등록하러 가시겠어요?
       </p>
-      <Link href="/restaurants/new">
+      <Link href={href}>
         <PillButton variant="outline">음식점 등록</PillButton>
       </Link>
     </div>

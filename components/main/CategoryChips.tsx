@@ -14,13 +14,15 @@ export function CategoryChips({
   addHref: string
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Chip active={selectedId === null} onClick={() => onSelect(null)}>
-        전체
-        <br />
-        음식점
-      </Chip>
-      <div className="h-10 w-px bg-black/10" />
+    <div className="no-scrollbar flex items-center gap-3 overflow-x-auto">
+      <div className="sticky left-0 z-10 flex shrink-0 items-center gap-3 bg-paper pr-3">
+        <Chip active={selectedId === null} onClick={() => onSelect(null)}>
+          전체
+          <br />
+          음식점
+        </Chip>
+        <div className="h-10 w-px bg-black/10" />
+      </div>
       {categories.map((c) => (
         <Chip key={c.id} active={selectedId === c.id} onClick={() => onSelect(c.id)}>
           {c.name}

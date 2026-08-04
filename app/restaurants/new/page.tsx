@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PillButton } from '@/components/ui'
 import { RestaurantForm } from '@/components/restaurants/RestaurantForm'
@@ -11,6 +11,8 @@ import { createRestaurant } from '@/lib/restaurants'
 
 export default function NewRestaurantPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const defaultCategoryId = searchParams.get('categoryId') ?? undefined
   const [user, setUser] = useState<LocalUser | null | undefined>(undefined)
   const [categories, setCategories] = useState<Category[] | undefined>(undefined)
 
@@ -45,6 +47,7 @@ export default function NewRestaurantPage() {
   return (
     <RestaurantForm
       categories={categories ?? []}
+      defaultCategoryId={defaultCategoryId}
       onSubmit={async (input) => {
         await createRestaurant(user.userId, input)
         router.push('/')

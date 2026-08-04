@@ -28,17 +28,21 @@ const EMPTY_VALUES: RestaurantFormValues = {
 export function RestaurantForm({
   categories,
   initialValues,
+  defaultCategoryId,
   onSubmit,
   title = '음식점 등록',
   extraAction,
 }: {
   categories: Category[]
   initialValues?: RestaurantFormValues
+  defaultCategoryId?: string
   onSubmit: (input: RestaurantInput) => Promise<void>
   title?: string
   extraAction?: React.ReactNode
 }) {
-  const [values, setValues] = useState<RestaurantFormValues>(initialValues ?? EMPTY_VALUES)
+  const [values, setValues] = useState<RestaurantFormValues>(
+    initialValues ?? { ...EMPTY_VALUES, categoryId: defaultCategoryId ?? '' }
+  )
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
