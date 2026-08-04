@@ -124,7 +124,7 @@ export default function RecommendationsPage() {
       )}
 
       {(status === 'locating' || status === 'loading') && (
-        <FoodLoading label={status === 'locating' ? '위치를 확인하는 중' : '주변 음식점을 찾아보는 중'} />
+        <FoodLoading label={status === 'locating' ? '위치를 확인하는 중' : '주변 음식점 찾는 중!'} />
       )}
 
       {status === 'error' && (

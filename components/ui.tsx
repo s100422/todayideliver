@@ -139,7 +139,7 @@ export function FoodLoading({ label, className }: { label: string; className?: s
   return (
     <p className={cn('flex items-center justify-center gap-1 py-16 text-ink/60', className)}>
       <span>{label}</span>
-      <span className="inline-block w-16 text-left">{foods.slice(0, frame).join('')}</span>
+      <span className="inline-block w-24 whitespace-nowrap text-left">{foods.slice(0, frame).join('')}</span>
     </p>
   )
 }
