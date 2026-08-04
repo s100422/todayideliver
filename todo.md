@@ -74,8 +74,10 @@
 - [x] 프론트: `app/recommendations/page.tsx` — 위치 권한 요청, 추천 결과 리스트, "내 리스트에 추가" 시 이름/주소 프리필된 등록 폼으로 연결
 - [x] 실제 위치(서울시청 좌표)로 종단 테스트: 실제 근처 음식점 5곳 + Gemini 추천 문구 정상 수신, 이미 등록한 곳은 중복 제외되는 것까지 확인
 
-## 백로그 (나중에 할 것)
-- [ ] `/recommendations` 리스트에 실제 지도 뷰 추가 (후보 위치에 핀 찍기)
-  - 필요한 것: 카카오 개발자센터에서 **JavaScript 키** 확보(이미 만든 앱의 "앱 키" 탭에 REST API 키 옆에 같이 있음), 그리고 "플랫폼 > Web"에 배포 도메인(`https://todayideliver.vercel.app`, 로컬 개발용 `http://localhost:3000`) 등록
-  - 지금 구조에 얹기만 하면 됨: `/api/nearby-recommendations`가 이미 각 후보의 좌표(x,y)를 카카오 응답에서 받고 있으니 그것만 응답에 추가로 포함시키면 됨 (`app/api/nearby-recommendations/route.ts`에서 `x`,`y` 필드 리턴에 추가)
-  - `AddressSearchField.tsx`에서 이미 검증된 "외부 스크립트 동적 로드 + 임베드" 패턴을 그대로 재사용 가능 (`//dapi.kakao.com/v2/maps/sdk.js?appkey=...&libraries=services`)
+## 11단계 — 내 주변 추천 위치 정확도 개선 + 지도 뷰 추가
+- [x] `getCurrentPosition`에 `enableHighAccuracy: true` 옵션 추가 (IP/와이파이 기반 대략 위치라 서울로 잘못 뜨는 문제 대응) — 실제 GPS 있는 기기에서 효과 있음, 폰으로 실사용 확인 필요
+- [x] 카카오 JavaScript 키 발급 + Web 플랫폼 도메인 등록(`todayideliver.vercel.app`, `localhost:3000`) 완료, `NEXT_PUBLIC_KAKAO_JS_KEY` 로컬/Vercel 환경변수 등록
+- [x] `/api/nearby-recommendations` 응답에 각 후보 좌표(`lat`,`lng`) 추가
+- [x] `components/recommendations/MapView.tsx` 추가 — 카카오맵 JS SDK 동적 로드(`AddressSearchField.tsx`와 같은 패턴), 내 위치 + 추천 후보 마커 표시, 마커 클릭 시 카카오맵 페이지로 이동
+- [x] `/recommendations` 페이지에 지도 삽입
+- [ ] **실사용 확인 필요**: 개발 도구 샌드박스 브라우저에서는 외부 스크립트(카카오맵 SDK) 로드가 막혀있어서 지도가 뜨는지 직접 스크린샷으로 확인은 못 했음 — 실제 배포된 사이트나 로컬 `npm run dev`로 직접 열어서 지도/마커 잘 뜨는지 확인 필요

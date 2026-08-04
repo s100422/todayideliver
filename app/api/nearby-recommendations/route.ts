@@ -17,6 +17,8 @@ type KakaoDocument = {
   distance: string
   phone: string
   place_url: string
+  x: string
+  y: string
 }
 
 type ExistingRestaurant = {
@@ -135,6 +137,8 @@ export async function POST(req: NextRequest) {
       distance: Number(c.distance),
       phone: c.phone,
       placeUrl: c.place_url,
+      lat: Number(c.y),
+      lng: Number(c.x),
       blurb: match?.blurb ?? '',
     }
   })

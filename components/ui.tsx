@@ -1,7 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { ButtonHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import {
+  ButtonHTMLAttributes,
+  InputHTMLAttributes,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+  useEffect,
+  useState,
+} from 'react'
 
 function cn(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(' ')
@@ -103,5 +110,22 @@ export function Card({ className, children }: { className?: string; children: Re
     <div className={cn('rounded-3xl bg-white p-5 shadow-sm shadow-black/5', className)}>
       {children}
     </div>
+  )
+}
+
+const FOOD_LOADING_FRAMES = ['🥭', '🥭🍗', '🥭🍗🍝']
+
+export function FoodLoading({ label, className }: { label: string; className?: string }) {
+  const [frame, setFrame] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => setFrame((f) => (f + 1) % FOOD_LOADING_FRAMES.length), 500)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <p className={cn('py-16 text-center text-ink/60', className)}>
+      {label} {FOOD_LOADING_FRAMES[frame]}
+    </p>
   )
 }

@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { BackButton, PillButton } from '@/components/ui'
+import { MapView } from '@/components/recommendations/MapView'
+import { BackButton, FoodLoading, PillButton } from '@/components/ui'
 import { listRestaurants } from '@/lib/restaurants'
 import { getAccessToken, getCurrentUser, type AppUser } from '@/lib/session'
 
@@ -15,6 +16,8 @@ type Recommendation = {
   distance: number
   phone: string
   placeUrl: string
+  lat: number
+  lng: number
   blurb: string
 }
 
@@ -26,6 +29,7 @@ export default function RecommendationsPage() {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
+  const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null)
 
   useEffect(() => {
     getCurrentUser().then(setUser)
@@ -40,7 +44,11 @@ export default function RecommendationsPage() {
     return null
   }
 
-  function fetchRecommendations() {
+  function getPosition(options: PositionOptions): Promise<GeolocationPosition> {
+    return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, options))
+  }
+
+  async function fetchRecommendations() {
     if (!user) return
     setStatus('locating')
     setError('')
@@ -51,38 +59,50 @@ export default function RecommendationsPage() {
       return
     }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        setStatus('loading')
-        try {
-          const existing = await listRestaurants(user.userId)
-          const token = await getAccessToken()
-          const res = await fetch('/api/nearby-recommendations', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-            body: JSON.stringify({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              existing: existing.map((r) => ({ name: r.name, address: r.address })),
-            }),
-          })
-          if (!res.ok) throw new Error('failed')
-          const data = await res.json()
-          setRecommendations(data.recommendations ?? [])
-          setStatus('done')
-        } catch {
-          setStatus('error')
-          setError('추천을 불러오지 못했어요. 다시 시도해주세요.')
-        }
-      },
-      () => {
+    let position: GeolocationPosition
+    try {
+      // GPS가 있으면 정확한 위치를, 없거나 시간이 오래 걸리면 대략적인 위치로 대체
+      position = await getPosition({ enableHighAccuracy: true, timeout: 8000 })
+    } catch (err) {
+      if ((err as GeolocationPositionError).code === GeolocationPositionError.PERMISSION_DENIED) {
         setStatus('error')
         setError('위치 정보 접근을 허용해주셔야 추천을 받을 수 있어요.')
+        return
       }
-    )
+      try {
+        position = await getPosition({ enableHighAccuracy: false, timeout: 10000 })
+      } catch {
+        setStatus('error')
+        setError('위치 정보를 가져오지 못했어요. 다시 시도해주세요.')
+        return
+      }
+    }
+
+    setStatus('loading')
+    setMyLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
+    try {
+      const existing = await listRestaurants(user.userId)
+      const token = await getAccessToken()
+      const res = await fetch('/api/nearby-recommendations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          existing: existing.map((r) => ({ name: r.name, address: r.address })),
+        }),
+      })
+      if (!res.ok) throw new Error('failed')
+      const data = await res.json()
+      setRecommendations(data.recommendations ?? [])
+      setStatus('done')
+    } catch {
+      setStatus('error')
+      setError('추천을 불러오지 못했어요. 다시 시도해주세요.')
+    }
   }
 
   return (
@@ -104,9 +124,7 @@ export default function RecommendationsPage() {
       )}
 
       {(status === 'locating' || status === 'loading') && (
-        <p className="py-16 text-center text-ink/60">
-          {status === 'locating' ? '위치를 확인하는 중…' : '주변 음식점을 찾아보는 중…'}
-        </p>
+        <FoodLoading label={status === 'locating' ? '위치를 확인하는 중' : '주변 음식점을 찾아보는 중'} />
       )}
 
       {status === 'error' && (
@@ -120,6 +138,19 @@ export default function RecommendationsPage() {
 
       {status === 'done' && recommendations.length === 0 && (
         <p className="py-16 text-center text-ink/60">근처에 새로 추천할 음식점을 못 찾았어요.</p>
+      )}
+
+      {status === 'done' && recommendations.length > 0 && myLocation && (
+        <MapView
+          center={myLocation}
+          markers={recommendations.map((r) => ({
+            id: r.id,
+            name: r.name,
+            lat: r.lat,
+            lng: r.lng,
+            placeUrl: r.placeUrl,
+          }))}
+        />
       )}
 
       {status === 'done' && recommendations.length > 0 && (
