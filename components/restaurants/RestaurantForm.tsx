@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { BackButton, Input, PillButton, Select, Textarea } from '@/components/ui'
 import type { Category } from '@/lib/categories'
 import type { RestaurantInput } from '@/lib/restaurants'
+import { AddressSearchField } from './AddressSearchField'
 
 export type RestaurantFormValues = {
   name: string
@@ -101,12 +102,7 @@ export function RestaurantForm({
       </FormRow>
 
       <FormRow label="음식점 주소">
-        <Input
-          placeholder="20자 이내"
-          maxLength={20}
-          value={values.address}
-          onChange={(e) => set('address', e.target.value)}
-        />
+        <AddressSearchField value={values.address} onChange={(address) => set('address', address)} />
       </FormRow>
 
       <FormRow label="카테고리">
