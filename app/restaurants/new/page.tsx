@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { PillButton } from '@/components/ui'
 import { RestaurantForm } from '@/components/restaurants/RestaurantForm'
 import { listCategories, type Category } from '@/lib/categories'
@@ -10,6 +10,14 @@ import { getLocalUser, type LocalUser } from '@/lib/localUser'
 import { createRestaurant } from '@/lib/restaurants'
 
 export default function NewRestaurantPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewRestaurantPageContent />
+    </Suspense>
+  )
+}
+
+function NewRestaurantPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const defaultCategoryId = searchParams.get('categoryId') ?? undefined
